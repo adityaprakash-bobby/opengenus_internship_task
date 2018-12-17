@@ -1,5 +1,5 @@
 #! /bin/env python2
-import sys
+import sys, ssl, httplib
 import urllib2
 from BeautifulSoup import BeautifulSoup
 from urlparse import urlparse
@@ -26,13 +26,26 @@ def parseData (url) :
         data = getURLData(url)
         ctr = 0
 
+    except httplib.BadStatusLine as e:
+        click.echo(click.style("Description: Unkown status code", fg = 'red'))
+        click.echo("Try again")
+        
+    except ValueError as e:
+        click.echo(click.style("Description: " + str(e), fg='red'))
+        click.echo("Try again adding/modifying 'http(s)://'.")
+
+    except ssl.CertificateError as e:
+        click.echo(click.style("Description: " + str(e), fg='red'))
+        click.echo("Try again.")
+
     except urllib2.HTTPError as e :
-        click.echo(click.style("Status Code:" + str(e.code) + "\nDescription:"
-                                    + e.reason + "\nTry again.", fg = 'red'))
+        click.echo(click.style("Status Code: " + str(e.code) + "\nDescription: "
+                                    + e.reason, fg = 'red'))
+        click.echo("Try again.")
 
     except urllib2.URLError as e :
-        click.echo(click.style("Description:" + str(e.reason)
-                                    + "\nTry again.", fg='red'))
+        click.echo(click.style("Description:" + str(e.reason), fg='red'))
+        click.echo("Try again.")
 
     else :
         document = BeautifulSoup(''.join(data))
@@ -40,27 +53,12 @@ def parseData (url) :
 
         for link in document.findAll('a', attrs = {'href' : re.compile("(https:\/\/"
                                     + domain + "[\/\w \.-]*\/?)|(^[.|/])|(^[#])")}):
-            print link.get('href')
+            # print link.get('href')
             ctr += 1
 
-        # for link in document.findAll('a', attrs = {'href' : re.compile("(https:\/\/"
-        #                             + domain + "[\/\w \.-]*\/?)")}):
-        #     # print link.get('href')
-        #     ctr += 1
-        #
-        # for link in document.findAll('a', attrs = {'href' : re.compile("^[.|/]")}):
-        #     # print link.get('href')
-        #     ctr += 1
-        #
-        # for link in document.findAll('a', attrs = {'href' : re.compile("^[#]")}):
-        #     # print link.get('href')
-        #     ctr += 1
-
-        # print  "\nSize:", len(data), " Bytes", "\nDomain:", domain, "\nInlinks:", ctr
-        
-        click.echo(click.style("\nSize : " + str(len(data)) + " Bytes", fg = 'green'))
-        click.echo(click.style("\nDomain : " + domain, fg = 'blue'))
-        click.echo(click.style("\nLinks within the domain : " + str(ctr), fg = 'yellow'))
+        click.echo(click.style("Size : " + str(len(data)) + " Bytes", fg = 'green'))
+        click.echo(click.style("Domain : " + domain, fg = 'green'))
+        click.echo(click.style("Links within the same domain : " + str(ctr), fg = 'yellow'))
 
 if __name__ == '__main__' :
     parseData(sys.argv[1])
