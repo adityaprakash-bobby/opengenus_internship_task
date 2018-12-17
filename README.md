@@ -16,5 +16,8 @@ virtualenv venv
 pip install -r requirements.txt
 
 # run the script
-python app.py <link to the webpage> # eg.: https://www.google.com 
+python app.py <link to the webpage> # eg.: https://www.google.com
+
+# run the Tests
+python app_test.py
 ```
