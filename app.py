@@ -39,19 +39,25 @@ def parseData (url) :
         domain = urlparse(url).netloc
 
         for link in document.findAll('a', attrs = {'href' : re.compile("(https:\/\/"
-                                    + domain + "[\/\w \.-]*\/?)")}):
-            # print link.get('href')
+                                    + domain + "[\/\w \.-]*\/?)|(^[.|/])|(^[#])")}):
+            print link.get('href')
             ctr += 1
 
-        for link in document.findAll('a', attrs = {'href' : re.compile("^[.|/]")}):
-            # print link.get('href')
-            ctr += 1
-
-        for link in document.findAll('a', attrs = {'href' : re.compile("^[#]")}):
-            # print link.get('href')
-            ctr += 1
+        # for link in document.findAll('a', attrs = {'href' : re.compile("(https:\/\/"
+        #                             + domain + "[\/\w \.-]*\/?)")}):
+        #     # print link.get('href')
+        #     ctr += 1
+        #
+        # for link in document.findAll('a', attrs = {'href' : re.compile("^[.|/]")}):
+        #     # print link.get('href')
+        #     ctr += 1
+        #
+        # for link in document.findAll('a', attrs = {'href' : re.compile("^[#]")}):
+        #     # print link.get('href')
+        #     ctr += 1
 
         # print  "\nSize:", len(data), " Bytes", "\nDomain:", domain, "\nInlinks:", ctr
+        
         click.echo(click.style("\nSize : " + str(len(data)) + " Bytes", fg = 'green'))
         click.echo(click.style("\nDomain : " + domain, fg = 'blue'))
         click.echo(click.style("\nLinks within the domain : " + str(ctr), fg = 'yellow'))
