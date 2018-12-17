@@ -1,4 +1,6 @@
-# ParseIt
+# ParseIt 
+[![Build Status](https://travis-ci.org/adityaprakash-bobby/opengenus_internship_task.svg?branch=master)](https://travis-ci.org/adityaprakash-bobby/opengenus_internship_task)
+---
 A simple script to fetch details about a webpage :
 - The size of webpage
 - The total links in the webpage in the same domain
